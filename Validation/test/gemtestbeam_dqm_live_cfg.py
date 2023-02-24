@@ -72,10 +72,10 @@ process.GlobalTag.toGet = cms.VPSet(cms.PSet(record=cms.string("GEMeMapRcd"),
 #process.load('Configuration.StandardSequences.Reconstruction_cff')
 
 process.load("DQM.Integration.config.environment_cfi")
-process.dqmEnv.subSystemFolder = "GEM"
-process.dqmSaver.tag = "GEM"
+process.dqmEnv.subSystemFolder = "GEMTestBeam"
+process.dqmSaver.tag = "GEMTestBeam"
 process.dqmSaver.runNumber = options.firstRun
-process.dqmSaverPB.tag = "GEM"
+process.dqmSaverPB.tag = "GEMTestBeam"
 process.dqmSaverPB.runNumber = options.firstRun
 #process.dqmEnv.eventInfoFolder = "EventInfo"
 #process.dqmSaver.path = ""

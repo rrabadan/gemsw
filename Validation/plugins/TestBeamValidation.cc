@@ -122,7 +122,7 @@ void TestBeamValidation::bookHistograms(DQMStore::IBooker& ibook, edm::Run const
   const GEMGeometry* GEMGeometry_ = &*hGEMGeom;
   
   ibook.cd();
-  ibook.setCurrentFolder("GEM/Digis");
+  ibook.setCurrentFolder("GEMTestBeam/Digis");
 
   for (auto station : GEMGeometry_->stations()) {
     int st = station->station();
