@@ -10,6 +10,8 @@
 <use name="xz"/>
 <use name="zstd"/>
 <use name="zlib"/>
+<use name="stdcxx-fs"/>
+<use name="boost_regex"/>
 <library   file="*.cc" name="gemswEventFilterPlugins">
   <flags   EDM_PLUGIN="1"/>
 </library>
