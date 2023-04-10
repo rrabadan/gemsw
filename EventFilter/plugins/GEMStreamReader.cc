@@ -30,9 +30,6 @@ GEMStreamReader::GEMStreamReader(edm::ParameterSet const& pset, edm::InputSource
   , fedId_(pset.getUntrackedParameter<int>("fedId", 1477))
   , fedId2_(pset.getUntrackedParameter<int>("fedId2", 1478))
 {
-  std::cout << "++++ " << std::endl; 
-  std::cout << "++++ GEMStreamReader " << std::endl; 
-  std::cout << "++++" << std::endl; 
   hasSecFile = false;
   produces<FEDRawDataCollection>();
   init();
@@ -84,6 +81,9 @@ bool GEMStreamReader::prepareNextFile() {
         openNextFile();
         continue;
       }
+    }
+    else {
+      return true;
     }
   }
 
@@ -187,8 +187,8 @@ void GEMStreamReader::produce(edm::Event& e) { e.put(std::move(rawData_)); }
 
 bool GEMStreamReader::openFile(const std::string& fileName, std::ifstream& fin) {
   std::cout << " open file.. " << fileName << std::endl;
-  // fin.close();
-  // fin.clear();
+  fin.close();
+  fin.clear();
   size_t pos = fileName.find(':');
   if (pos != std::string::npos) {
     std::string prefix = fileName.substr(0, pos);

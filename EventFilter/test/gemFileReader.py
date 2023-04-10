@@ -10,7 +10,7 @@ options.register('runNumber',
                  'runNumber')
 
 options.register('runInputDir',
-                 './',
+                 '.',
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.string,
                  'runInputDir')

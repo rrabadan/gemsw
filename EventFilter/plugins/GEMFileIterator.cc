@@ -60,9 +60,6 @@ GEMFileIterator::GEMFileIterator(edm::ParameterSet const& pset)
   nextEntryTimeoutMillis_ = pset.getUntrackedParameter<int32_t>("nextEntryTimeoutMillis");
   
   forceFileCheckTimeoutMillis_ = 5015;
-  std::cout << "++++ " << std::endl; 
-  std::cout << "++++ GEMFileIterator " << std::endl; 
-  std::cout << "++++" << std::endl; 
   reset();
 }
 
@@ -153,6 +150,8 @@ void GEMFileIterator::collect(bool ignoreTimers) {
 
   if (!std::filesystem::exists(runPath_)) {
     logFileAction("Directory does not exist: ", runPath_);
+    logFileAction("Internal error: referenced entry is not the map.");
+    state_ = State::EOR;
     return;
   }
 
@@ -209,6 +208,7 @@ void GEMFileIterator::collect(bool ignoreTimers) {
 }
 
 void GEMFileIterator::update_state() {
+  
   using std::chrono::duration_cast;
   using std::chrono::high_resolution_clock;
   using std::chrono::milliseconds;
