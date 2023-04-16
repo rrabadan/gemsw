@@ -1,6 +1,9 @@
 #ifndef gemsw_EventFilter_GEMFileIterator_h
 #define gemsw_EventFilter_GEMFileIterator_h
 
+// A copy of
+// DQMServices_StreamerIO_DQMFileIterator
+
 #include <chrono>
 #include <map>
 #include <string>

@@ -1,6 +1,11 @@
 #ifndef gemsw_EventFilter_GEMStreamReader_h
 #define gemsw_EventFilter_GEMStreamReader_h
 
+// A copy of 
+// DQMServices_StreamerIO_DQMStreamerReader
+// and
+// GEMStreamSource
+
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/LuminosityBlock.h"

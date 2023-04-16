@@ -27,6 +27,7 @@ using namespace std;
 GEMStreamReader::GEMStreamReader(edm::ParameterSet const& pset, edm::InputSourceDescription const& desc)
   : ProducerSourceFromFiles(pset, desc, true)
   , fIterator_(pset)
+  , flagEndOfRunKills_(pset.getUntrackedParameter<bool>("flagEndOfRunKills", false))
   , fedId_(pset.getUntrackedParameter<int>("fedId", 1477))
   , fedId2_(pset.getUntrackedParameter<int>("fedId2", 1478))
 {
@@ -303,7 +304,7 @@ std::vector<uint64_t>* GEMStreamReader::makeFEDRAW(FRDEventMsgView* frdEventMsg,
 }
 
 void GEMStreamReader::fillDescription(edm::ParameterSetDescription& desc) {
-  desc.addUntracked<bool>("endOfRunKills", false);
+  desc.addUntracked<bool>("flagEndOfRunKills", false);
   desc.addUntracked<int>("fedId", 1477);
   desc.addUntracked<int>("fedId2", 1478);
   desc.addUntracked<bool>("hasSecFile", false);

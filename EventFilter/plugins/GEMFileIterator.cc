@@ -158,6 +158,7 @@ void GEMFileIterator::collect(bool ignoreTimers) {
   directory_iterator dend;
   for (directory_iterator diter(runPath_); diter != dend; ++diter) {
     const boost::regex fn_re("run(\\d+)_f(\\d+)_([a-zA-Z0-9]+)(_.*)?\\.raw");
+    const boost::regex eor_re("run(\\d+).eor");
 
     const std::string filename = diter->path().filename().string();
     const std::string file = diter->path().string();
@@ -166,7 +167,7 @@ void GEMFileIterator::collect(bool ignoreTimers) {
       continue;
     }
 
-    boost::smatch result;
+    boost::smatch result, eor_match;
     if (boost::regex_match(filename, result, fn_re)) {
       unsigned int run = std::stoi(result[1]);
       unsigned int fragment = std::stoi(result[2]);
@@ -177,12 +178,6 @@ void GEMFileIterator::collect(bool ignoreTimers) {
       if (run != runNumber_)
         continue;
 
-      // check if file is EoR
-      if ((fragment == 0) && (label == "EoR") && (!eor_.loaded)) {
-        fn_eor = file;
-        continue;
-      }
-
       if (entrySeen_.find(fragment) != entrySeen_.end()) {
         continue;
       }
@@ -190,6 +185,17 @@ void GEMFileIterator::collect(bool ignoreTimers) {
       Entry entry = Entry::load_entry(runPath_, filename, fragment);
       entrySeen_.emplace(fragment, entry);
       logFileAction("Found file: ", filename);
+    }
+
+    // check if file is EoR
+    if (boost::regex_match(filename, eor_match, eor_re)) {
+      unsigned int run = std::stoi(eor_match[1]);
+      if (run != runNumber_)
+        continue;
+      if (!eor_.loaded) {
+        fn_eor = file;
+        continue;
+      }
     }
   }
 
