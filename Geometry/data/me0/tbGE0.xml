@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <DDDefinition xmlns="http://www.cern.ch/cms/DDL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.cern.ch/cms/DDL ../../../../DetectorDescription/Schema/DDLSchema.xsd">
     <ConstantsSection label="ge0.xml" eval="true">
-        <Constant name="layers" value="5" />
+        <Constant name="layers" value="4" />
         <Constant name="dxSC" value="0.0*cm" />
         <Constant name="dySC" value="30.0*cm" />
         <Constant name="dzSC" value="23.0*cm" />
@@ -14,7 +14,6 @@
     </ConstantsSection>
 
     <PosPartSection label="ge0.xml">
-    <!-- main Translation done in mf.xml -->
         <PosPart copyNumber="1">
             <rParent name="ge0:GE0P" />
             <rChild name="ge0:GE0Box" />
@@ -22,19 +21,24 @@
         </PosPart>
     </PosPartSection>
     <PosPartSection label="ge0.xml">
-    <!-- main Translation done in mf.xml -->
         <PosPart copyNumber="2">
             <rParent name="ge0:GE0P" />
             <rChild name="ge0:GE0Box" />
-            <Translation x="0*cm" y="0*cm" z="7*cm" />
+            <Translation x="0*cm" y="0*cm" z="10*cm" />
         </PosPart>
     </PosPartSection>
     <PosPartSection label="ge0.xml">
-    <!-- main Translation done in mf.xml -->
         <PosPart copyNumber="3">
             <rParent name="ge0:GE0P" />
             <rChild name="ge0:GE0Box" />
-            <Translation x="0*cm" y="0*cm" z="14*cm" />
+            <Translation x="0*cm" y="0*cm" z="20*cm" />
+        </PosPart>
+    </PosPartSection>
+    <PosPartSection label="ge0.xml">
+        <PosPart copyNumber="4">
+            <rParent name="ge0:GE0P" />
+            <rChild name="ge0:GE0Box" />
+            <Translation x="0*cm" y="0*cm" z="30*cm" />
         </PosPart>
     </PosPartSection>
 </DDDefinition>

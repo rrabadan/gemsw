@@ -8,3 +8,6 @@
 <use name="DQMServices/Core"/>
 <flags CXXFLAGS="-g"/>
 <flags EDM_PLUGIN="1"/>
+<library   file="*.cc" name="gemswValidationPlugins">
+  <flags   EDM_PLUGIN="1"/>
+</library>

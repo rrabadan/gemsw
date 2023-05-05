@@ -32,16 +32,15 @@ process.load('Configuration.StandardSequences.EndOfProcess_cff')
 #process.MessageLogger.debugModules = cms.untracked.vstring('*')
 
 if debug:
-    #process.MessageLogger.cerr.threshold = "DEBUG"
-    process.MessageLogger.cerr.FwkReport.reportEvery = 5000
-    #process.MessageLogger.debugModules = ["source", "muonGEMDigis"]
+    process.MessageLogger.cerr.threshold = "DEBUG"
+    process.MessageLogger.debugModules = ["source", "muonGEMDigis"]
     process.maxEvents.input = cms.untracked.int32(4000)
 else:
     process.MessageLogger.cerr.FwkReport.reportEvery = 5000
 
 process.source = cms.Source("GEMStreamSource",
-                            fedId = cms.untracked.int32(12),
-                            fedId2 = cms.untracked.int32(10),
+                            fedId = cms.untracked.int32(1479),
+                            fedId2 = cms.untracked.int32(1480),
                             firstRun = cms.untracked.uint32(options.firstRun),
                             fileNames = cms.untracked.vstring(options.inputFiles),
                             firstLuminosityBlockForEachRun = cms.untracked.VLuminosityBlockID({}))
@@ -54,33 +53,34 @@ process.rawDataCollector = cms.EDAlias(source=cms.VPSet(
 
 process.load('EventFilter.GEMRawToDigi.muonGEMDigis_cfi')
 process.muonGEMDigis.InputLabel = cms.InputTag("rawDataCollector")
-process.muonGEMDigis.fedIdStart = cms.uint32(10)
-process.muonGEMDigis.fedIdEnd = cms.uint32(12)
+process.muonGEMDigis.fedIdStart = cms.uint32(1479)
+process.muonGEMDigis.fedIdEnd = cms.uint32(1479)
 process.muonGEMDigis.skipBadStatus = cms.bool(False)
 process.muonGEMDigis.useDBEMap = True
 
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.load('gemsw.Geometry.GeometryTestBeam2022_cff')
+process.load('gemsw.Geometry.GeometryMe0_cff')
 #process.gemGeometry.applyAlignment = cms.bool(True)
 
+
 process.GlobalTag.toGet = cms.VPSet(cms.PSet(record=cms.string("GEMeMapRcd"),
-                                             tag=cms.string("GEMeMapTestBeam"),
-                                             connect=cms.string("sqlite_fip:gemsw/EventFilter/data/GEMeMap_TestBeam_2022.db")),
+                                             tag=cms.string("GEMeMapME0stack"),
+                                             connect=cms.string("sqlite_fip:gemsw/EventFilter/data/GEMeMap_ME0stack.db")),
 )
 
 #process.load('Configuration.StandardSequences.Reconstruction_cff')
 
 process.load("DQM.Integration.config.environment_cfi")
-process.dqmEnv.subSystemFolder = "GEMTestBeam"
-process.dqmSaver.tag = "GEMTestBeam"
+process.dqmEnv.subSystemFolder = "ME0"
+process.dqmSaver.tag = "ME0"
 process.dqmSaver.runNumber = options.firstRun
-process.dqmSaverPB.tag = "GEMTestBeam"
+process.dqmSaverPB.tag = "ME0"
 process.dqmSaverPB.runNumber = options.firstRun
 #process.dqmEnv.eventInfoFolder = "EventInfo"
 #process.dqmSaver.path = ""
 
-process.Validation = DQMEDAnalyzer("TestBeamValidation",
+process.Validation = DQMEDAnalyzer("ME0Digis",
                                    gemDigiLabel = cms.InputTag("muonGEMDigis", ""))
 
 process.unpack = cms.Path(process.muonGEMDigis)

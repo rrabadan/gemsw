@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<DDDefinition>
+  <SpecParSection label="GEMSpecsFilter.xml">
+    <SpecPar name="MuonGEMTree">
+      <PartSelector path="//GE0Box"/>      
+      <PartSelector path="//GE0L"/>      
+      <PartSelector path="//GHA0..*"/>
+      <Parameter name="MuStructure" value="MuonEndCapGEM"/>
+    </SpecPar>
+  </SpecParSection>
+</DDDefinition>
