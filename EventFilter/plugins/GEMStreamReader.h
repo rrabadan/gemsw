@@ -64,6 +64,8 @@ private:
   int fedId2_;
   uint16_t detectedFRDversion_ = 0;
   uint16_t flags_ = 0;
+  unsigned int procEventsFile_ = 0;
+  unsigned int minEventsFile_;
 };
 
 #endif  // EventFilter_Utilities_GEMStreamReader_h

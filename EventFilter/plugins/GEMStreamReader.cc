@@ -30,6 +30,7 @@ GEMStreamReader::GEMStreamReader(edm::ParameterSet const& pset, edm::InputSource
   , flagEndOfRunKills_(pset.getUntrackedParameter<bool>("flagEndOfRunKills", false))
   , fedId_(pset.getUntrackedParameter<int>("fedId", 1477))
   , fedId2_(pset.getUntrackedParameter<int>("fedId2", 1478))
+  , minEventsFile_(pset.getUntrackedParameter<int>("minEventsPerFile", 1))
 {
   hasSecFile = false;
   produces<FEDRawDataCollection>();
@@ -76,6 +77,11 @@ bool GEMStreamReader::prepareNextFile() {
       return false;
     }
 
+    if ((procEventsFile_ >= minEventsFile_) && (!fIterator_.entryReady()) && (fIterator_.state() == State::EOR)) {
+      closeFile();
+      return false;
+    }
+
     // Open next file
     if (!fin_.is_open()) {
       if (fIterator_.entryReady()) {
@@ -85,6 +91,11 @@ bool GEMStreamReader::prepareNextFile() {
     }
     else {
       return true;
+    }
+
+    if (fIterator_.entryReady() && (procEventsFile_ >= minEventsFile_)) {
+      openNextFile();
+      continue;
     }
   }
 
@@ -97,7 +108,8 @@ void GEMStreamReader::openNextFile() {
   GEMFileIterator::Entry entry = fIterator_.open();
   std::string path = entry.get_data_path();
   
-  openFile(path, fin_);
+  if (openFile(path, fin_))
+    procEventsFile_ = 0;
 }
 
 void GEMStreamReader::closeFile() {
@@ -133,6 +145,7 @@ std::unique_ptr<FRDEventMsgView> GEMStreamReader::prepareNextEvent() {
       if (eview == nullptr) {
         closeFile();
       } else {
+        procEventsFile_ += 1;
         return eview;
       }
     }
@@ -187,7 +200,7 @@ bool GEMStreamReader::setRunAndEventInfo(edm::EventID& id,
 void GEMStreamReader::produce(edm::Event& e) { e.put(std::move(rawData_)); }
 
 bool GEMStreamReader::openFile(const std::string& fileName, std::ifstream& fin) {
-  std::cout << " open file.. " << fileName << std::endl;
+  std::cout << " openning file.. " << fileName << std::endl;
   fin.close();
   fin.clear();
   size_t pos = fileName.find(':');
@@ -308,6 +321,7 @@ void GEMStreamReader::fillDescription(edm::ParameterSetDescription& desc) {
   desc.addUntracked<int>("fedId", 1477);
   desc.addUntracked<int>("fedId2", 1478);
   desc.addUntracked<bool>("hasSecFile", false);
+  desc.addUntracked<int>("minEventsPerFile", 1);
   GEMFileIterator::fillDescription(desc);
   ProducerSourceFromFiles::fillDescription(desc);
 }
