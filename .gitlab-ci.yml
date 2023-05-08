@@ -86,7 +86,7 @@ run-test:
     - cd gemsw/Validation/test
     - mkdir upload
     - sed -i -e '/+ process.dqmSaverPB/d' gem_me0_dqm_live_cfg.py
-    - cmsRun gemtestbeam_dqm_live_cfg.py inputFiles=${CI_PROJECT_DIR}/00000059.raw maxEvents=2000
+    - cmsRun gem_me0_dqm_live_cfg.py inputFiles=${CI_PROJECT_DIR}/00000059.raw maxEvents=2000
     - cp -r upload ${CI_PROJECT_DIR}
   needs:
     - job: cmssw_build
