@@ -30,7 +30,7 @@ GEMStreamReader::GEMStreamReader(edm::ParameterSet const& pset, edm::InputSource
   , flagEndOfRunKills_(pset.getUntrackedParameter<bool>("flagEndOfRunKills", false))
   , fedId_(pset.getUntrackedParameter<int>("fedId", 1477))
   , fedId2_(pset.getUntrackedParameter<int>("fedId2", 1478))
-  , minEventsFile_(pset.getUntrackedParameter<int>("minEventsPerFile", 1))
+  , minEventsFile_(pset.getUntrackedParameter<uint32_t>("minEventsPerFile", 1))
 {
   hasSecFile = false;
   produces<FEDRawDataCollection>();

@@ -150,7 +150,6 @@ void GEMFileIterator::collect(bool ignoreTimers) {
 
   if (!std::filesystem::exists(runPath_)) {
     logFileAction("Directory does not exist: ", runPath_);
-    logFileAction("Internal error: referenced entry is not the map.");
     state_ = State::EOR;
     return;
   }
