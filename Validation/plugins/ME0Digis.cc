@@ -46,6 +46,8 @@ private:
 
   void analyze(const edm::Event&, const edm::EventSetup&) override;
 
+  void setBinLabelAndTitle(dqm::impl::MonitorElement *me);
+
   // ------------ member data ------------
   edm::EDGetTokenT<GEMDigiCollection> gemDigis_;
 
@@ -126,23 +128,42 @@ void ME0Digis::bookHistograms(DQMStore::IBooker& ibook, edm::Run const& run, edm
       for (auto chamber : superChamber->chambers()) {
         int ch = chamber->id().chamber();
         
-        digi_occ_[ch] = ibook.book2D(Form("digi_occ_GE%d_ch%d", st, ch),
-                                     Form("Occupancy GE%d ch%d", st, ch),
-                                     384, -0.5, 383.5,
-                                     nEta, 0.5, nEta+0.5);
+        dqm::impl::MonitorElement *me = ibook.book2D(Form("digi_occ_GE%d_ch%d", st, ch),
+                                                     Form("Occupancy GE%d ch%d", st, ch),
+                                                     384, -0.5, 383.5,
+                                                     nEta, 0.5, nEta+0.5);
 
+        setBinLabelAndTitle(me);
+        digi_occ_[ch] = me;
 
         for (auto etaPart : chamber->etaPartitions()) {
           int ieta = etaPart->id().ieta();
           
           ME3IdsKey key3{st, ch, ieta}; 
-          digi_occ_detail_[key3] = ibook.book1D(Form("digi_occ_GE%d_ch%d_ieta%d", st, ch, ieta),
-                                                Form("Occupancy GE%d chamber %d iEta%d", st, ch, ieta),
-                                                384, -0.5, 383.5);
+          dqm::impl::MonitorElement *me = ibook.book1D(Form("digi_occ_GE%d_ch%d_ieta%d", st, ch, ieta),
+                                                       Form("Occupancy GE%d chamber %d iEta%d", st, ch, ieta),
+                                                       384, -0.5, 383.5);
+          setBinLabelAndTitle(me);
+          digi_occ_detail_[key3] = me;
         }
       }
     }
   }
+}
+
+void ME0Digis::setBinLabelAndTitle(dqm::impl::MonitorElement *me) {
+  me->setAxisTitle("Digi", 1);
+
+  if (me->kind() == MonitorElementData::Kind::TH2F ||
+      me->kind() == MonitorElementData::Kind::TH2D) {
+    me->setAxisTitle("i#eta", 2);
+    const int nBinsY = me->getNbinsY();
+    for (int b = 1; b <= nBinsY; b++) {
+      me->setBinLabel(b, Form("%d", b), 2);
+    }
+  }
+
+  return;
 }
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------

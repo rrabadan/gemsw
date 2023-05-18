@@ -39,7 +39,7 @@ if not options.inputFiles:
                         runNumber = cms.untracked.uint32(options.runNumber),
                         runInputDir =  cms.untracked.string(options.runInputDir),
                         streamLabel =  cms.untracked.string(options.streamLabel),
-                        minEventsPerFile = cms.untracked.uint32(5000),
+                        minEventsPerFile = cms.untracked.uint32(15000),
                         scanOnce = cms.untracked.bool(options.scanOnce),
                         delayMillis= cms.untracked.uint32(500),
                         nextEntryTimeoutMillis = cms.untracked.int32(200000))
