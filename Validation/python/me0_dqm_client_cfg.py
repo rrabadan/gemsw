@@ -12,6 +12,12 @@ process.options = cms.untracked.PSet(
     SkipEvent=cms.untracked.vstring('ProductNotFound'),
 )
 
+if options.inputFiles:
+    process.maxEvents = cms.untracked.PSet(
+        input = cms.untracked.int32(options.maxEvents),
+        # output = cms.optional.untracked.allowed(cms.int32,cms.PSet)
+    )
+
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.MessageLogger.cerr.FwkReport.reportEvery = 5000
@@ -30,7 +36,6 @@ process.muonGEMDigis.useDBEMap = True
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 from Configuration.AlCa.GlobalTag import GlobalTag
 process.load('gemsw.Geometry.GeometryMe0_cff')
-#process.gemGeometry.applyAlignment = cms.bool(True)
 
 
 process.GlobalTag.toGet = cms.VPSet(cms.PSet(record=cms.string("GEMeMapRcd"),
@@ -40,6 +45,10 @@ process.GlobalTag.toGet = cms.VPSet(cms.PSet(record=cms.string("GEMeMapRcd"),
 
 #process.load('Configuration.StandardSequences.Reconstruction_cff')
 
+updir = f"{options.runInputDir}/upload" 
+if options.updir:
+    updir = f"{options.updir}/upload"
+
 process.load("DQM.Integration.config.environment_cfi")
 process.dqmEnv.subSystemFolder = "ME0"
 process.dqmSaver.tag = "ME0"
@@ -47,8 +56,8 @@ process.dqmSaver.runNumber = options.runNumber
 process.dqmSaverPB.tag = "ME0"
 process.dqmSaverPB.runNumber = options.runNumber
 #process.dqmEnv.eventInfoFolder = "EventInfo"
-process.dqmSaver.path = f"{options.runInputDir}/upload"
-process.dqmSaverPB.path = f"{options.runInputDir}/upload/pb"
+process.dqmSaver.path = updir
+process.dqmSaverPB.path = f"{updir}/pb"
 
 process.Validation = DQMEDAnalyzer("ME0Digis",
                                    gemDigiLabel = cms.InputTag("muonGEMDigis", ""))

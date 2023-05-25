@@ -27,6 +27,12 @@ options.register('scanOnce',
                  VarParsing.VarParsing.varType.bool,
                  'Do not repeat file scans.')
 
+options.register('updir',
+                 '',
+                 VarParsing.VarParsing.multiplicity.singleton,
+                 VarParsing.VarParsing.varType.string,
+                 'upload directory')
+
 options.parseArguments()
 
 if not options.inputFiles:
@@ -35,6 +41,7 @@ if not options.inputFiles:
                         fedId = cms.untracked.int32(1479),
                         fedId2 = cms.untracked.int32(1480),
                         fileNames=cms.untracked.vstring(options.inputFiles),
+                        firstRun =  cms.untracked.uint32(options.runNumber),
                         firstLuminosityBlockForEachRun=cms.untracked.VLuminosityBlockID({}),
                         runNumber = cms.untracked.uint32(options.runNumber),
                         runInputDir =  cms.untracked.string(options.runInputDir),
@@ -48,7 +55,8 @@ else:
     source = cms.Source("GEMStreamSource",
                         fedId = cms.untracked.int32(1479),
                         fedId2 = cms.untracked.int32(1480),
-                        fileNames=cms.untracked.vstring(options.inputFiles),
+                        fileNames =cms.untracked.vstring(options.inputFiles),
+                        firstRun =  cms.untracked.uint32(options.runNumber),
                         firstLuminosityBlockForEachRun=cms.untracked.VLuminosityBlockID({}))
 
 print("Source settings", source)
