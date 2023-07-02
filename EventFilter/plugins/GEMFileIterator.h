@@ -25,10 +25,12 @@ class GEMFileIterator {
       std::string run_path;
 
       unsigned int entry_number;
+      bool sec_file;
 
       static Entry load_entry(const std::string& run_path,
                               const std::string& filename,
-                              const unsigned int entryNumber);
+                              const unsigned int entryNumber,
+                              bool seFile);
 
       std::string get_data_path() const;
       std::string state;
@@ -93,6 +95,7 @@ class GEMFileIterator {
     long nextEntryTimeoutMillis_;
     long forceFileCheckTimeoutMillis_;
     bool flagScanOnce_;
+    bool secFile_;
 
     std::string runPath_;
 

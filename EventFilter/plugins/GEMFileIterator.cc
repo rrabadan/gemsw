@@ -16,11 +16,13 @@
 GEMFileIterator::Entry
 GEMFileIterator::Entry::load_entry(const std::string& run_path,
                                    const std::string& filename,
-                                   const unsigned int entryNumber) {
+                                   const unsigned int entryNumber,
+                                   bool sec_file) {
   
   Entry entry;
   entry.filename = filename;
   entry.run_path = run_path;
+  entry.sec_file =  sec_file;
   
   entry.entry_number = entryNumber;
   
@@ -55,6 +57,7 @@ GEMFileIterator::GEMFileIterator(edm::ParameterSet const& pset)
   runNumber_ = pset.getUntrackedParameter<unsigned int>("runNumber");
   runInputDir_ = pset.getUntrackedParameter<std::string>("runInputDir");
   streamLabel_ = pset.getUntrackedParameter<std::string>("streamLabel");
+  secFile_ = pset.getUntrackedParameter<bool>("secFile");
   flagScanOnce_ = pset.getUntrackedParameter<bool>("scanOnce");
   delayMillis_ = pset.getUntrackedParameter<uint32_t>("delayMillis");
   nextEntryTimeoutMillis_ = pset.getUntrackedParameter<int32_t>("nextEntryTimeoutMillis");
@@ -181,7 +184,7 @@ void GEMFileIterator::collect(bool ignoreTimers) {
         continue;
       }
 
-      Entry entry = Entry::load_entry(runPath_, filename, fragment);
+      Entry entry = Entry::load_entry(runPath_, filename, fragment, secFile_);
       entrySeen_.emplace(fragment, entry);
       logFileAction("Found file: ", filename);
     }
@@ -279,6 +282,7 @@ void GEMFileIterator::fillDescription(edm::ParameterSetDescription& desc) {
   desc.addUntracked<unsigned int>("runNumber")->setComment("Run number passed via config");
   desc.addUntracked<std::string>("streamLabel")->setComment("Stream Label");
   desc.addUntracked<std::string>("runInputDir")->setComment("Directory for the raw files");
+  desc.addUntracked<bool>("secFile")->setComment("Secondary file");
   desc.addUntracked<bool>("scanOnce")->setComment("Do not repeat directory scans");
   desc.addUntracked<uint32_t>("delayMillis")->setComment("Delay to wait between file checks in ms");
   desc.addUntracked<int32_t>("nextEntryTimeoutMillis", -1)->setComment("Time (in ms) to wait before moving to the next entry, -1 to disable it");
