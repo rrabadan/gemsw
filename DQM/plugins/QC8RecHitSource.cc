@@ -41,6 +41,10 @@ void QC8RecHitSource::bookHistograms(DQMStore::IBooker &booker, edm::Run const &
                                           Form("Rechit Cluster Size Chamber %d;Cluster Size;i#eta", ch),
                                           maxClsSizeToShow_, 0.5, maxClsSizeToShow_ + 0.5,
                                           16, 0.5, 16.5);
+    mapStripRecHitClsSize_[ch] = booker.book2D(Form("strip_rechit_cls_size_ch%d", ch),
+                                          Form("Rechit Cluster Size Per Strip Chamber %d;Cluster Size;strip", ch),
+                                          maxClsSizeToShow_, 0.5, maxClsSizeToShow_ + 0.5,
+                                          3072, 0, 6143);
     
     // 1 hour
     booker.setCurrentFolder("GE21QC8/DigiStrip");
@@ -60,13 +64,13 @@ void QC8RecHitSource::bookHistograms(DQMStore::IBooker &booker, edm::Run const &
                                      Form("DigiStrip Occupancy Chamber %d Eta 9-12: 10 minutes;events;strip", ch),
                                      100, 0, 60000,
                                      //6000, 0, 60000,
-                                     768, 0, 1535);                                                         // Not Uploaded 
+                                     768, 0, 1535);                                                          
     booker.setCurrentFolder("GE21QC8/DigiStrip");
     mapDigiStripOcc1hrEta9_12_[ch] = booker.book2D(Form("digiStrip_occ_1hr_ch%d_eta9_12", ch),
                                      Form("DigiStrip Occupancy Chamber %d Eta 9-12: 1 Hour;events;strip", ch),
                                      100, 0, 375000,
                                      //6000, 0, 375000,
-                                     768, 0, 1535);                                                         // Not Uploaded 
+                                     768, 0, 1535);                                                          
     booker.setCurrentFolder("GE21QC8/DigiStrip");
     mapDigiStripOcc1hrEta13_16_[ch] = booker.book2D(Form("digiStrip_occ_1hr_ch%d_eta13_16", ch),
                                       Form("DigiStrip Occupancy Chamber %d Eta 13-16: 1 Hour;events;strip", ch),
@@ -116,7 +120,7 @@ void QC8RecHitSource::bookHistograms(DQMStore::IBooker &booker, edm::Run const &
     booker.setCurrentFolder("GE21QC8/DigiStrip");
     mapDigiStripOcc10hrEta9_12_[ch] = booker.book2D(Form("digiStrip_occ_10hr_ch%d_eta9_12", ch),
                                       Form("DigiStrip Occupancy Chamber %d Eta 9-12: 10 Hours;events;strip", ch),
-                                      1000, 0, 3750000,
+                                      100, 0, 3750000,
                                       //6000, 0, 3750000,
                                       768, 0, 1535);
     booker.setCurrentFolder("GE21QC8/DigiStrip");
@@ -251,7 +255,56 @@ void QC8RecHitSource::analyze(edm::Event const &event, edm::EventSetup const &iS
       auto gY = gPos.y();
       mapRecHitOcc_[ch]->Fill(gX, gY);
       if (cls_size > maxClsSizeToShow_) cls_size = maxClsSizeToShow_;
-      mapRecHitClsSize_[ch]->Fill(cls_size, ieta);
+        mapRecHitClsSize_[ch]->Fill(cls_size, ieta);
+        for (auto digi = digiRange.first; digi != digiRange.second; ++digi) { 
+          auto strip = digi->strip();
+          if (ieta == 2) {
+            strip = strip + 384;
+          }
+          if (ieta == 3) {
+            strip = strip + 768;
+          }
+          if (ieta == 4) {
+            strip = strip + 1152;
+          }
+          if (ieta == 5) {
+            strip = strip + 1536; 
+          }
+          if (ieta == 6) {
+            strip += 1920;
+          }
+          if (ieta == 7) {
+            strip += 2304; 
+          }
+          if (ieta == 8) {
+            strip += 2688;
+          }
+          if (ieta == 9) {
+            strip += 3072;
+          }
+          if (ieta == 10) {
+            strip += 3456;
+          }
+          if (ieta == 11) {
+            strip += 3840;
+          }
+          if (ieta == 12) {
+            strip += 4224;
+          }
+          if (ieta == 13) {
+            strip += 4608;
+          }
+          if (ieta == 14) {
+            strip += 4992;
+          }
+          if (ieta == 15) {
+            strip += 5376; 
+          }
+          if (ieta == 16) {
+            strip += 5760;
+          }
+          mapStripRecHitClsSize_[ch]->Fill(cls_size, strip);
+        }
     }
   }
 }

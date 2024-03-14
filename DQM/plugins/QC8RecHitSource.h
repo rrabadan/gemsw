@@ -44,7 +44,8 @@ private:
   std::map<unsigned int, dqm::impl::MonitorElement*> mapDigiOcc_;
   std::map<unsigned int, dqm::impl::MonitorElement*> mapRecHitOcc_;
   std::map<unsigned int, dqm::impl::MonitorElement*> mapRecHitClsSize_;
-
+  std::map<unsigned int, dqm::impl::MonitorElement*> mapStripRecHitClsSize_;
+  
   std::map<unsigned int, dqm::impl::MonitorElement*> mapDigiStripOcc10minEta9_12_;
 
   std::map<unsigned int, dqm::impl::MonitorElement*> mapDigiStripOcc1hrEta1_4_;
