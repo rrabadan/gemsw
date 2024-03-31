@@ -250,6 +250,8 @@ void QC8RecHitSource::analyze(edm::Event const &event, edm::EventSetup const &iS
    auto rechitRange = gemRecHit->get(gId);
     for (auto rechit = rechitRange.first; rechit != rechitRange.second; ++rechit) {
       auto cls_size = rechit->clusterSize();
+      auto first_clsStrip = rechit->firstClusterStrip();
+      // std::cout << "first_clsStrip = " << first_clsStrip << std::endl;
       auto gPos = etaPart->surface().toGlobal(rechit->localPosition());
       auto gX = gPos.x();
       auto gY = gPos.y();
@@ -257,53 +259,53 @@ void QC8RecHitSource::analyze(edm::Event const &event, edm::EventSetup const &iS
       if (cls_size > maxClsSizeToShow_) cls_size = maxClsSizeToShow_;
         mapRecHitClsSize_[ch]->Fill(cls_size, ieta);
         for (auto digi = digiRange.first; digi != digiRange.second; ++digi) { 
-          auto strip = digi->strip();
+          //auto strip = digi->strip();
           if (ieta == 2) {
-            strip = strip + 384;
+            first_clsStrip += 384;
           }
           if (ieta == 3) {
-            strip = strip + 768;
+            first_clsStrip += 768;
           }
           if (ieta == 4) {
-            strip = strip + 1152;
+            first_clsStrip += 1152;
           }
           if (ieta == 5) {
-            strip = strip + 1536; 
+            first_clsStrip = first_clsStrip + 1536; 
           }
           if (ieta == 6) {
-            strip += 1920;
+            first_clsStrip += 1920;
           }
           if (ieta == 7) {
-            strip += 2304; 
+            first_clsStrip += 2304; 
           }
           if (ieta == 8) {
-            strip += 2688;
+            first_clsStrip += 2688;
           }
           if (ieta == 9) {
-            strip += 3072;
+            first_clsStrip += 3072;
           }
           if (ieta == 10) {
-            strip += 3456;
+            first_clsStrip += 3456;
           }
           if (ieta == 11) {
-            strip += 3840;
+            first_clsStrip += 3840;
           }
           if (ieta == 12) {
-            strip += 4224;
+            first_clsStrip += 4224;
           }
           if (ieta == 13) {
-            strip += 4608;
+            first_clsStrip += 4608;
           }
           if (ieta == 14) {
-            strip += 4992;
+            first_clsStrip += 4992;
           }
           if (ieta == 15) {
-            strip += 5376; 
+            first_clsStrip += 5376; 
           }
           if (ieta == 16) {
-            strip += 5760;
+            first_clsStrip += 5760;
           }
-          mapStripRecHitClsSize_[ch]->Fill(cls_size, strip);
+          mapStripRecHitClsSize_[ch]->Fill(cls_size, first_clsStrip);
         }
     }
   }
